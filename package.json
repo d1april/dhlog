@@ -2,5 +2,9 @@
   "name": "dhlog",
   "author": "Dominik Herbst",
   "version": "0.0.1",
-  "main": "index.js"
+  "main": "lib/logger.js",
+  "devDependencies": {
+    "mocha": "*",
+    "rmdir": "*"
+  }
 }
