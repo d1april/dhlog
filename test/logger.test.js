@@ -1,62 +1,65 @@
-/* Created by Dominik Herbst on 2016-02-21 */
+'use strict';
 
-var fs = require('fs');
-var rmdir = require('rmdir');
-var assert = require('assert');
+const fs = require('fs');
+const rmdir = require('rmdir');
+const assert = require('assert');
 
-describe('log something', function(){
+describe('log something', () => {
 
-	/**
-	 * @type {Logger}
-	 */
-	var log = require('../')('test');
+    const log = require('../').forModule(module);
 
-	it('should log an info', function(){
-		log.info('test line');
-	});
+    it('should log an info', function () {
+        log.info('test line');
+    });
 
-	it('should log error info', function(){
-		log.error('test error', new Error('error'));
-	});
+    it('should log error info', function () {
+        log.error('test error', new Error('error'));
+    });
+
+    after(() => {
+        return log.close();
+    });
 
 });
 
-describe('cycle files', function(){
+describe('cycle files', () => {
 
-	/**
-	 * @type {Logger}
-	 */
-	var log;
-	var tempDir = 'temp';
+    let log;
+    const tempDir = 'temp';
+    const maxFileSize = 1024;
+    const maxFileCount = 10;
 
-	beforeEach(function() {
-		if(!fs.existsSync(tempDir)) {
-			fs.mkdirSync(tempDir);
-		}
+    beforeEach(() => {
+        if (!fs.existsSync(tempDir)) {
+            fs.mkdirSync(tempDir);
+        }
 
-		log = require('../')('test', {
-			outputs: [
-				{type: 'fileOutput', path: tempDir+'/default.log', maxLevel: 4}
-			]
-		});
-		log.outputs[0].output.maxFileSize = 1024;
+        log = require('../').forName('test')
+            .withOnlyOutput('fileOutput', {
+                path: tempDir + '/default.log',
+                maxLevel: 4,
+                maxFileSize: maxFileSize,
+                maxFileCount: maxFileCount
+            });
 
-	});
+    });
 
-	afterEach(function(callb){
-		rmdir(tempDir, callb);
-	});
+    afterEach((callb) => {
+        rmdir(tempDir, callb);
+    });
 
-	it('should log 5000 chars', function(end){
-		for(var i=0; i<100; i++) {
-			log.info('test line, some test, test, test, test, test, test'); // 50 chars
-		}
-		log.close(function(){
-			var files = fs.readdirSync(tempDir);
-			assert.equal(files.length, 10, 'Only 10 files should be in the log dir');
-			end();
-		});
-	});
+    it('should log 5000 chars', () => {
+        const lines = 200;
+
+        for (let i = 0; i < lines; i++) {
+            log.info('test line, some test, test, test, test, test, test'); // 50 chars
+        }
+        return log.close()
+            .then(() => {
+                const files = fs.readdirSync(tempDir);
+                assert.equal(files.length, 10, 'Only 10 files should be in the log dir');
+            });
+    });
 
 
 });

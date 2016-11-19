@@ -2,9 +2,21 @@
   "name": "dhlog",
   "author": "Dominik Herbst",
   "version": "0.0.1",
-  "main": "lib/logger.js",
+  "description": "A simple logger that can have different outputs",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dhcode/dhlog"
+  },
   "devDependencies": {
     "mocha": "*",
     "rmdir": "*"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
   }
 }
