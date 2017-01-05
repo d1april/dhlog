@@ -14,7 +14,7 @@ describe('log something', () => {
         .withOnlyOutput('fileOutput', {path: tempLogFile})
         .withOutput('consoleOutput');
 
-    const ids = ['alpha', 'beta', 'gamma', 'delta', 'epsilon'];
+    const ids = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta'];
 
     before(() => {
         if (!fs.existsSync(tempDir)) {
@@ -36,6 +36,10 @@ describe('log something', () => {
 
     it('should log error info', () => {
         log.error('test error '+ids[3], new Error('error '+ids[4]));
+    });
+
+    it('should log debug info', () => {
+        log.debug('test debug '+ids[5]);
     });
 
     it('should have logged', () =>  {

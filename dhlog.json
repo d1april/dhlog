@@ -1,0 +1,6 @@
+{
+  "outputs": [
+    {"type": "consoleOutput", "maxLevel": 4},
+    {"type": "fileOutput","path": "./logs/default.log","maxLevel": 4}
+  ]
+}

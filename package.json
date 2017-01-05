@@ -14,7 +14,7 @@
     "rmdir": "*"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=5.0.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha"
